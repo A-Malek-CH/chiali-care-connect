@@ -55,7 +55,7 @@ function formatDate(value: string) {
 function AppointmentsPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [service, setService] = useState(SERVICE_NAMES[0]);
+  const [service, setService] = useState<string>(SERVICE_NAMES[0] ?? "");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
 
