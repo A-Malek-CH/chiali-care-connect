@@ -8,9 +8,15 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { CalendarCheck, Stethoscope } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { CLINIC } from "@/lib/clinic-data";
 
 function NotFoundComponent() {
   return (
@@ -22,12 +28,9 @@ function NotFoundComponent() {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+          <Button asChild>
+            <Link to="/">Go home</Link>
+          </Button>
         </div>
       </div>
     </div>
@@ -51,21 +54,17 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
+          <Button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Try again
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
+          </Button>
+          <Button variant="outline" asChild>
+            <a href="/">Go home</a>
+          </Button>
         </div>
       </div>
     </div>
@@ -77,21 +76,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Chiali Clinic — Private medical care" },
+      {
+        name: "description",
+        content:
+          "Chiali Clinic in Sidi Bel Abbes: general medicine, cardiology, pediatrics, lab and imaging. Book your appointment online.",
+      },
+      { property: "og:title", content: "Chiali Clinic — Private medical care" },
+      {
+        property: "og:description",
+        content: "Book an appointment with the Chiali Clinic team in a few clicks.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
@@ -114,13 +121,99 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SiteHeader() {
+  const { user, isAdmin } = useAuth();
+  const router = useRouter();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    await router.navigate({ to: "/auth", replace: true });
+  };
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <Stethoscope className="size-5" />
+          </span>
+          <span className="text-lg font-semibold tracking-tight">{CLINIC.name}</span>
+        </Link>
+        <nav className="flex items-center gap-1 sm:gap-2">
+          {user ? (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/appointments">My appointments</Link>
+              </Button>
+              {isAdmin && (
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/admin">Admin</Link>
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={signOut}>
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/auth">Sign in</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/appointments">
+                  <CalendarCheck className="size-4" />
+                  Book now
+                </Link>
+              </Button>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="border-t border-border bg-sidebar">
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 text-sm sm:grid-cols-3">
+        <div>
+          <p className="font-semibold">{CLINIC.name}</p>
+          <p className="mt-2 text-muted-foreground">{CLINIC.tagline}</p>
+        </div>
+        <div className="text-muted-foreground">
+          <p>{CLINIC.address}</p>
+          <p className="mt-1">{CLINIC.phone}</p>
+          <p>{CLINIC.email}</p>
+        </div>
+        <div className="text-muted-foreground">
+          {CLINIC.hours.map((h) => (
+            <p key={h.day}>
+              <span className="text-foreground">{h.day}</span> — {h.time}
+            </p>
+          ))}
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
