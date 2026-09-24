@@ -8,7 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { CalendarCheck, Stethoscope } from "lucide-react";
+import { CalendarCheck, Stethoscope, Brain } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -144,6 +144,12 @@ function SiteHeader() {
             <>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/appointments">My appointments</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/mri-scan" className="flex items-center gap-1.5">
+                  <Brain className="size-4" />
+                  <span>MRI Analysis</span>
+                </Link>
               </Button>
               {isAdmin && (
                 <Button variant="ghost" size="sm" asChild>

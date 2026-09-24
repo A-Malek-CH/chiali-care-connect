@@ -38,12 +38,10 @@ function Home() {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] opacity-80">
               Private medical clinic
             </p>
-            <h1 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl">
-              {CLINIC.name}
-            </h1>
+            <h1 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl">{CLINIC.name}</h1>
             <p className="mt-4 max-w-md text-lg opacity-90">
-              {CLINIC.tagline} Request a slot online and our reception calls you back to
-              confirm the exact time.
+              {CLINIC.tagline} Request a slot online and our reception calls you back to confirm the
+              exact time.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button size="lg" variant="secondary" asChild>

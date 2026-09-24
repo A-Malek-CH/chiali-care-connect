@@ -16,7 +16,8 @@ export const Route = createFileRoute("/auth")({
       { title: "Patient sign in — Chiali Clinic" },
       {
         name: "description",
-        content: "Create a patient account or sign in to book and follow your appointments at Chiali Clinic.",
+        content:
+          "Create a patient account or sign in to book and follow your appointments at Chiali Clinic.",
       },
       { property: "og:title", content: "Patient sign in — Chiali Clinic" },
       {
@@ -94,9 +95,7 @@ function AuthPage() {
       <Card className="mx-auto w-full max-w-md shadow-soft">
         <CardHeader>
           <CardTitle className="text-2xl">Patient account</CardTitle>
-          <CardDescription>
-            Sign in or create an account to request an appointment.
-          </CardDescription>
+          <CardDescription>Sign in or create an account to request an appointment.</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin">
