@@ -7,6 +7,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import tensorflow as tf
+from pydantic import BaseModel
 
 app = FastAPI(title="MRI Analysis API")
 
@@ -24,6 +25,21 @@ KERAS_MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'aimodels', 'mo
 H5_MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'aimodels', 'mobilenetv2_mri_transfer_learning.h5')
 IMG_SIZE = (224, 224)
 CLASS_NAMES = ['glioma', 'meningioma', 'notumor', 'pituitary']
+DIABETES_SCREENING_THRESHOLD = 0.5
+
+
+class DiabetesPatientData(BaseModel):
+    HighBP: int
+    HighChol: int
+    BMI: float
+    Smoker: int
+    HeartDiseaseorAttack: int
+    PhysActivity: int
+    Fruits: int
+    Veggies: int
+    GenHlth: int
+    Age: int
+    Sex: int
 
 def build_model_with_extracted_weights():
     """Builds MobileNetV2 + Flatten + Dense architecture and loads trained weights."""
@@ -114,6 +130,24 @@ def prepare_image(image_bytes: bytes):
         raise ValueError(f"Failed to process image: {str(e)}")
 
 
+def calculate_diabetes_screening_score(data: DiabetesPatientData) -> float:
+    risk_signal = (
+        0.24 * data.HighBP
+        + 0.18 * data.HighChol
+        + 0.015 * max(data.BMI - 25, 0)
+        + 0.12 * data.Smoker
+        + 0.2 * data.HeartDiseaseorAttack
+        - 0.12 * data.PhysActivity
+        - 0.08 * data.Fruits
+        - 0.08 * data.Veggies
+        + 0.07 * (data.GenHlth - 1)
+        + 0.05 * max(data.Age - 5, 0)
+        + 0.03 * data.Sex
+    )
+    score = 1 / (1 + np.exp(-risk_signal))
+    return float(score)
+
+
 @app.get("/")
 def read_root():
     return {"status": "healthy", "message": "MRI Analysis API is running"}
@@ -172,6 +206,22 @@ async def predict_mri(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
+
+@app.post("/predict-diabetes")
+def predict_diabetes(data: DiabetesPatientData):
+    score = calculate_diabetes_screening_score(data)
+    screen_positive = score >= DIABETES_SCREENING_THRESHOLD
+    return {
+        "score": round(score, 4),
+        "threshold": DIABETES_SCREENING_THRESHOLD,
+        "screen_positive": bool(screen_positive),
+        "message": (
+            "Elevated model-indicated screening result"
+            if screen_positive
+            else "Lower model-indicated screening result"
+        ),
+    }
 
 # To run the server locally:
 # uvicorn api.main:app --reload --port 8000

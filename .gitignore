@@ -30,3 +30,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+diabetes_model/chiali_diabetes_model.pkl
+diabetes_model/__pycache__/
+*.pyc
