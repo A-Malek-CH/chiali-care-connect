@@ -8,7 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { CalendarCheck, Stethoscope } from "lucide-react";
+import { Bot, CalendarCheck, Stethoscope } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -144,6 +144,12 @@ function SiteHeader() {
             <>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/appointments">My appointments</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/assistant">
+                  <Bot className="size-4" />
+                  AI Assistant
+                </Link>
               </Button>
               {isAdmin && (
                 <Button variant="ghost" size="sm" asChild>
