@@ -145,6 +145,9 @@ function SiteHeader() {
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/appointments">My appointments</Link>
               </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/diabetes-prediction">Diabetes Prediction</Link>
+              </Button>
               {isAdmin && (
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/admin">Admin</Link>
@@ -158,6 +161,9 @@ function SiteHeader() {
             <>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/auth">Sign in</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/diabetes-prediction">Diabetes Prediction</Link>
               </Button>
               <Button size="sm" asChild>
                 <Link to="/appointments">
