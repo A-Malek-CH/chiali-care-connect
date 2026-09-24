@@ -1,9 +1,9 @@
 # Chiali Clinic Connect
 
-create a website for a private medical clinic  " Chiali ", it should : 
--display some info about the clinic like location, pictures and services ( use dummy data for now ) and reviews 
--allow patients to create accounts and book appointments , patients should enter their full names and phone number (so the admin calls them later) 
--allow admins to confirm an appointment or suggest another timing  (create one admin account to start with and give me the credentials ) 
+create a website for a private medical clinic " Chiali ", it should :
+-display some info about the clinic like location, pictures and services ( use dummy data for now ) and reviews
+-allow patients to create accounts and book appointments , patients should enter their full names and phone number (so the admin calls them later)
+-allow admins to confirm an appointment or suggest another timing (create one admin account to start with and give me the credentials )
 emphasize creating the database , and sign in , sign up and appointment functionalities
 
 This project was built with [Lovable](https://lovable.dev).

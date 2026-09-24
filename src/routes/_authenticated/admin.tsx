@@ -95,8 +95,8 @@ function AdminPage() {
           Appointment requests
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Confirm a request or suggest another time — the patient sees your answer and their
-          phone number is listed for the call-back.
+          Confirm a request or suggest another time — the patient sees your answer and their phone
+          number is listed for the call-back.
         </p>
 
         <div className="mt-8 space-y-4">

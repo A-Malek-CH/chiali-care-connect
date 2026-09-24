@@ -224,9 +224,7 @@ function AppointmentsPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-semibold">{appt.service}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(appt.requested_at)}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{formatDate(appt.requested_at)}</p>
                   </div>
                   <Badge variant={statusVariant(appt.status)}>
                     {STATUS_LABELS[appt.status] ?? appt.status}

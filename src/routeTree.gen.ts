@@ -16,6 +16,7 @@ import { Route as DiabetesRiskRouteImport } from './routes/diabetes-risk'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAppointmentsRouteImport } from './routes/_authenticated/appointments'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedMriScanRouteImport } from './routes/_authenticated/mri-scan'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   path: '/assistant',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMriScanRoute = AuthenticatedMriScanRouteImport.update({
+  id: '/mri-scan',
+  path: '/mri-scan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/appointments': typeof AuthenticatedAppointmentsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/mri-scan': typeof AuthenticatedMriScanRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/appointments': typeof AuthenticatedAppointmentsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/mri-scan': typeof AuthenticatedMriScanRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,14 +86,27 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/appointments': typeof AuthenticatedAppointmentsRoute
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/mri-scan': typeof AuthenticatedMriScanRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/diabetes-risk' | '/admin' | '/appointments' | '/assistant'
+    | '/'
+    | '/auth'
+    | '/diabetes-risk'
+    | '/admin'
+    | '/appointments'
+    | '/assistant'
+    | '/mri-scan'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/diabetes-risk' | '/admin' | '/appointments' | '/assistant'
+    | '/'
+    | '/auth'
+    | '/diabetes-risk'
+    | '/admin'
+    | '/appointments'
+    | '/assistant'
+    | '/mri-scan'
   id:
     | '__root__'
     | '/'
@@ -95,6 +116,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/appointments'
     | '/_authenticated/assistant'
+    | '/_authenticated/mri-scan'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssistantRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mri-scan': {
+      id: '/_authenticated/mri-scan'
+      path: '/mri-scan'
+      fullPath: '/mri-scan'
+      preLoaderRoute: typeof AuthenticatedMriScanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -162,12 +191,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAppointmentsRoute: typeof AuthenticatedAppointmentsRoute
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedMriScanRoute: typeof AuthenticatedMriScanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAppointmentsRoute: AuthenticatedAppointmentsRoute,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedMriScanRoute: AuthenticatedMriScanRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
